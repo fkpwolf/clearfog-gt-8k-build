@@ -55,7 +55,7 @@ export MV_DDR_PATH=$ROOTDIR/build/bootloader/mv-ddr-marvell
 export BL33=$ROOTDIR/build/bootloader/$UBOOTDIR/u-boot.bin
 
 # Ubuntu version
-export UBUNTU_VER=20.04.1
+export UBUNTU_VER=20.04.2
 
 echo "Downloading boot loader"
 cd $ROOTDIR
