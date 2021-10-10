@@ -2,9 +2,9 @@
 
 This is a fork of official SolidRun repo, updating everything possible to latest versions, and making hardware work as it should.
 
-- U-boot 2020.10
-- Linux kernel 5.10.x (longterm)
-- Ubuntu 20.04.2 (LTS)
+- U-boot 2021.10
+- Linux kernel 5.15.x (longterm)
+- Ubuntu 20.04.3 (LTS)
 
 Tested and working hardware:
 
