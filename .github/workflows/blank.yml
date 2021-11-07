@@ -28,7 +28,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build Image
         run: |
-          sudo apt -y install device-tree-compiler
+          sudo apt -y install device-tree-compiler p7zip-full
           sudo ./buildme.sh
       
       # Upload image
