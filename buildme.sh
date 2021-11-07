@@ -173,7 +173,7 @@ fi
 cd $ROOTDIR
 
 echo "Creating partitions and images"
-dd if=/dev/zero of=$ROOTDIR/image.img bs=1M count=512
+dd if=/dev/zero of=$ROOTDIR/image.img bs=1M count=1024
 parted --script -a optimal $ROOTDIR/image.img mklabel msdos mkpart primary 4096s 100% set 1 boot on
 
 echo "Filling image with data"
