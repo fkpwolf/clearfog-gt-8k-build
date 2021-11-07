@@ -166,8 +166,8 @@ if [[ ! -f $ROOTDIR/build/ubuntu-$UBUNTU_VER-live-server-arm64.squashfs ]]; then
         if [[ ! -f ubuntu-$UBUNTU_VER-live-server-arm64.iso ]]; then
                 wget http://cdimage.ubuntu.com/releases/20.04/release/ubuntu-$UBUNTU_VER-live-server-arm64.iso
         fi
-        7z x ubuntu-$UBUNTU_VER-live-server-arm64.iso install/filesystem.squashfs
-	mv install/filesystem.squashfs ubuntu-$UBUNTU_VER-live-server-arm64.squashfs
+        7z x ubuntu-$UBUNTU_VER-live-server-arm64.iso casper/filesystem.squashfs
+	mv casper/filesystem.squashfs ubuntu-$UBUNTU_VER-live-server-arm64.squashfs
 fi
 
 cd $ROOTDIR
