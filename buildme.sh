@@ -56,6 +56,7 @@ export BL33=$ROOTDIR/build/bootloader/$UBOOTDIR/u-boot.bin
 
 # Ubuntu version
 export UBUNTU_VER=20.04.3
+export UBUNTU_IMAGE=ubuntu-$UBUNTU_VER-live-server-arm64
 
 echo "Downloading boot loader"
 cd $ROOTDIR
@@ -161,19 +162,19 @@ if [ $? != 0 ]; then
 fi
 
 echo "Downloading Ubuntu Image"
-if [[ ! -f $ROOTDIR/build/ubuntu-$UBUNTU_VER-live-server-arm64.squashfs ]]; then
+if [[ ! -f $ROOTDIR/build/$UBUNTU_IMAGE.squashfs ]]; then
         cd $ROOTDIR/build
-        if [[ ! -f ubuntu-$UBUNTU_VER-live-server-arm64.iso ]]; then
-                wget http://cdimage.ubuntu.com/releases/20.04/release/ubuntu-$UBUNTU_VER-live-server-arm64.iso
+        if [[ ! -f $UBUNTU_IMAGE.iso ]]; then
+                wget http://cdimage.ubuntu.com/releases/20.04/release/$UBUNTU_IMAGE.iso
         fi
-        7z x ubuntu-$UBUNTU_VER-live-server-arm64.iso casper/filesystem.squashfs
-	mv casper/filesystem.squashfs ubuntu-$UBUNTU_VER-live-server-arm64.squashfs
+        7z x $UBUNTU_IMAGE.iso */filesystem.squashfs
+	mv */filesystem.squashfs $UBUNTU_IMAGE.squashfs
 fi
 
 cd $ROOTDIR
 
 echo "Creating partitions and images"
-dd if=/dev/zero of=$ROOTDIR/image.img bs=1M count=1024
+dd if=/dev/zero of=$ROOTDIR/image.img bs=1M count=1512
 parted --script -a optimal $ROOTDIR/image.img mklabel msdos mkpart primary 4096s 100% set 1 boot on
 
 echo "Filling image with data"
@@ -184,7 +185,7 @@ ${SUDO}mkfs.ext4 $LOOPDEV
 ${SUDO}mount $LOOPDEV $ROOTDIR/image
 
 echo "Copying filesystem to the image"
-${SUDO}unsquashfs -d $ROOTDIR/image/ -f $ROOTDIR/build/ubuntu-$UBUNTU_VER-live-server-arm64.squashfs
+${SUDO}unsquashfs -d $ROOTDIR/image/ -f $ROOTDIR/build/$UBUNTU_IMAGE.squashfs
 
 echo "Copying kernel to the image"
 cp -av $ROOTDIR/build/$KERNELDIR/arch/arm64/boot/Image $ROOTDIR/image/boot/
