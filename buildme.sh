@@ -57,6 +57,7 @@ export BL33=$ROOTDIR/build/bootloader/$UBOOTDIR/u-boot.bin
 # Ubuntu version
 export UBUNTU_VER=20.04.3
 export UBUNTU_IMAGE=ubuntu-$UBUNTU_VER-live-server-arm64
+export ROOTPWD=1234
 
 echo "Downloading boot loader"
 cd $ROOTDIR
@@ -203,7 +204,11 @@ ${SUDO}chown -R root:root $ROOTDIR/image/boot $ROOTDIR/image/lib/modules
 cd $ROOTDIR/image
 ${SUDO}patch -p1 -i $ROOTDIR/patches/rootfs/01-fstab.patch
 ${SUDO}patch -p1 -i $ROOTDIR/patches/rootfs/02-autologin-on-serial-console.patch
+${SUDO}patch -p1 -i $ROOTDIR/patches/rootfs/03-disable-cloud-init.patch
 cd $ROOTDIR
+
+echo "Set root password"
+${SUDO}chroot "$ROOTDIR/image" /bin/bash -c "(echo $ROOTPWD;echo $ROOTPWD;) | passwd root >/dev/null 2>&1"
 
 echo "Finishing..."
 ${SUDO}umount $ROOTDIR/image
