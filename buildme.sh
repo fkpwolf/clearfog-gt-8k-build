@@ -28,7 +28,7 @@ export CXXFLAGS=
 # U-Boot config
 export UBOOTDIR=u-boot
 export UBOOT_REPO=git://git.denx.de/u-boot.git
-export UBOOT_TAG=v2021.10
+export UBOOT_TAG=v2022.04
 
 # Marvell binaries
 export BINARIES_BRANCH=binaries-marvell-armada-18.12
@@ -55,8 +55,9 @@ export MV_DDR_PATH=$ROOTDIR/build/bootloader/mv-ddr-marvell
 export BL33=$ROOTDIR/build/bootloader/$UBOOTDIR/u-boot.bin
 
 # Ubuntu version
-export UBUNTU_VER=20.04.3
-export UBUNTU_IMAGE=ubuntu-$UBUNTU_VER-live-server-arm64
+export UBUNTU_VER=22.04
+export UBUNTU_PATCH=
+export UBUNTU_IMAGE=ubuntu-$UBUNTU_VER$UBUNTU_PATCH-live-server-arm64
 
 echo "Downloading boot loader"
 cd $ROOTDIR
@@ -165,10 +166,10 @@ echo "Downloading Ubuntu Image"
 if [[ ! -f $ROOTDIR/build/$UBUNTU_IMAGE.squashfs ]]; then
         cd $ROOTDIR/build
         if [[ ! -f $UBUNTU_IMAGE.iso ]]; then
-                wget http://cdimage.ubuntu.com/releases/20.04/release/$UBUNTU_IMAGE.iso
+                wget http://cdimage.ubuntu.com/releases/$UBUNTU_VER/release/$UBUNTU_IMAGE.iso
         fi
-        7z x $UBUNTU_IMAGE.iso */filesystem.squashfs
-	mv */filesystem.squashfs $UBUNTU_IMAGE.squashfs
+        7z x $UBUNTU_IMAGE.iso */ubuntu-server-minimal.squashfs
+	mv */ubuntu-server-minimal.squashfs $UBUNTU_IMAGE.squashfs
 fi
 
 cd $ROOTDIR

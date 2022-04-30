@@ -1,5 +1,4 @@
---- a/etc/fstab	2021-08-24 11:43:56.000000000 +0300
+--- /dev/null
 +++ b/etc/fstab	2021-11-09 15:35:12.000000000 +0300
-@@ -1 +1 @@
--# UNCONFIGURED FSTAB FOR BASE SYSTEM
+@@ -0,0 +1 @@
 +/dev/root	/	ext4	errors=remount-ro,noatime,nodiratime,discard,x-systemd.growfs	0 1
