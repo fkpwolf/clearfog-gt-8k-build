@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Checking all required tools are installed"
-TOOLS="wget tar git make 7z unsquashfs dd mkfs.ext4 parted dtc losetup patch"
+TOOLS="wget tar git make dd mkfs.ext4 parted dtc losetup patch"
 
 for i in $TOOLS; do
 	TOOL_PATH=`which $i`
@@ -57,7 +57,7 @@ export BL33=$ROOTDIR/build/bootloader/$UBOOTDIR/u-boot.bin
 # Ubuntu version
 export UBUNTU_VER=22.04
 export UBUNTU_PATCH=
-export UBUNTU_IMAGE=ubuntu-$UBUNTU_VER$UBUNTU_PATCH-live-server-arm64
+export UBUNTU_IMAGE=ubuntu-base-$UBUNTU_VER$UBUNTU_PATCH-base-arm64
 export ROOTPWD=1234
 
 echo "Downloading boot loader"
@@ -163,14 +163,10 @@ if [ $? != 0 ]; then
 	exit -1
 fi
 
-echo "Downloading Ubuntu Image"
-if [[ ! -f $ROOTDIR/build/$UBUNTU_IMAGE.squashfs ]]; then
-        cd $ROOTDIR/build
-        if [[ ! -f $UBUNTU_IMAGE.iso ]]; then
-                wget http://cdimage.ubuntu.com/releases/$UBUNTU_VER/release/$UBUNTU_IMAGE.iso
-        fi
-        7z x $UBUNTU_IMAGE.iso */ubuntu-server-minimal.squashfs
-	mv */ubuntu-server-minimal.squashfs $UBUNTU_IMAGE.squashfs
+echo "Downloading Ubuntu Base Image"
+cd $ROOTDIR/build
+if [[ ! -f $UBUNTU_IMAGE.tar.gz ]]; then
+		wget http://cdimage.ubuntu.com/ubuntu-base/releases/$UBUNTU_VER/release/$UBUNTU_IMAGE.tar.gz
 fi
 
 cd $ROOTDIR
@@ -187,7 +183,7 @@ ${SUDO}mkfs.ext4 $LOOPDEV
 ${SUDO}mount $LOOPDEV $ROOTDIR/image
 
 echo "Copying filesystem to the image"
-${SUDO}unsquashfs -d $ROOTDIR/image/ -f $ROOTDIR/build/$UBUNTU_IMAGE.squashfs
+${SUDO}tar -xf $ROOTDIR/build/$UBUNTU_IMAGE.tar.gz -C $ROOTDIR/image/
 
 echo "Copying kernel to the image"
 cp -av $ROOTDIR/build/$KERNELDIR/arch/arm64/boot/Image $ROOTDIR/image/boot/
